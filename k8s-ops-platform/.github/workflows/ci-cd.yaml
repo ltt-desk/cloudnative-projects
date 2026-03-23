@@ -1,0 +1,89 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DOCKER_REGISTRY: docker.io/yourusername
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and push backend
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend
+        push: true
+        tags: ${{ env.DOCKER_REGISTRY }}/k8s-ops-backend:${{ env.IMAGE_TAG }}
+        cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/k8s-ops-backend:buildcache
+        cache-to: type=registry,ref=${{ env.DOCKER_REGISTRY }}/k8s-ops-backend:buildcache,mode=max
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and push frontend
+      uses: docker/build-push-action@v4
+      with:
+        context: ./frontend
+        push: true
+        tags: ${{ env.DOCKER_REGISTRY }}/k8s-ops-frontend:${{ env.IMAGE_TAG }}
+        cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/k8s-ops-frontend:buildcache
+        cache-to: type=registry,ref=${{ env.DOCKER_REGISTRY }}/k8s-ops-frontend:buildcache,mode=max
+
+  deploy:
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Configure kubectl
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
+        export KUBECONFIG=kubeconfig
+    
+    - name: Deploy to Kubernetes
+      env:
+        DOCKER_REGISTRY: ${{ env.DOCKER_REGISTRY }}
+        IMAGE_TAG: ${{ env.IMAGE_TAG }}
+      run: |
+        export DOCKER_REGISTRY=${{ env.DOCKER_REGISTRY }}
+        export IMAGE_TAG=${{ env.IMAGE_TAG }}
+        
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/ingress.yaml
+    
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/k8s-ops-backend -n k8s-ops
+        kubectl rollout status deployment/k8s-ops-frontend -n k8s-ops
