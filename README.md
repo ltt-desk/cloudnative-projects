@@ -7,6 +7,10 @@
 [![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://golang.org/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Stars](https://img.shields.io/github/stars/ltt-desk/cloudnative-projects?style=social)](https://github.com/ltt-desk/cloudnative-projects/stargazers)
+[![Forks](https://img.shields.io/github/forks/ltt-desk/cloudnative-projects?style=social)](https://github.com/ltt-desk/cloudnative-projects/network/members)
+[![Issues](https://img.shields.io/github/issues/ltt-desk/cloudnative-projects)](https://github.com/ltt-desk/cloudnative-projects/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/ltt-desk/cloudnative-projects)](https://github.com/ltt-desk/cloudnative-projects/commits/main)
 
 ---
 
