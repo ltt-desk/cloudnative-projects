@@ -1,6 +1,6 @@
 # ☁️ Cloud Native Projects for Internship
 
-> 🎓 云原生实战项目合集 - 为计算机专业学生实习面试打造
+> 🎓 云原生实战项目合集 
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28+-blue?logo=kubernetes)](https://kubernetes.io/)
@@ -16,11 +16,11 @@
 
 ## 📖 项目介绍
 
-本项目包含两个完整的云原生实战项目，涵盖 **容器化、Kubernetes 编排、微服务架构、CI/CD、监控告警** 等核心技能，专为计算机专业学生实习面试设计。
+本项目包含两个完整的云原生实战项目，涵盖 **容器化、Kubernetes 编排、微服务架构、CI/CD、监控告警** 等核心技能。。
 
 ### 🎯 适合人群
 
-- 🎓 计算机相关专业大三/大四学生
+- 🎓 计算机相关专业
 - 💼 寻找云原生/DevOps/后端开发实习
 - 📚 想系统学习云原生技术栈
 - 🚀 需要高质量项目丰富简历
